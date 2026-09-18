@@ -1,0 +1,124 @@
+{
+  "tools": [
+    {
+      "name": "get_events",
+      "description": "Lists upcoming events from the primary Google Calendar of an account, ordered by start time.",
+      "module": ".calendar_tool",
+      "function": "get_events",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_name": {
+            "type": "string",
+            "enum": { "$config": "accounts" },
+            "description": "Google account to use."
+          },
+          "max_results": {
+            "type": "integer",
+            "description": "Maximum number of events to return. Defaults to 10."
+          }
+        },
+        "required": ["account_name"]
+      },
+      "requires_confirmation": false,
+      "background": true
+    },
+    {
+      "name": "add_event",
+      "description": "Adds a new event to the primary Google Calendar of an account. A date-only value (YYYY-MM-DD) creates a full-day event; otherwise use ISO 8601 date-times.",
+      "module": ".calendar_tool",
+      "function": "add_event",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_name": {
+            "type": "string",
+            "enum": { "$config": "accounts" },
+            "description": "Google account to use."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Event title."
+          },
+          "start_time": {
+            "type": "string",
+            "description": "Event start as ISO 8601 date-time, or YYYY-MM-DD for a full-day event."
+          },
+          "end_time": {
+            "type": "string",
+            "description": "Event end as ISO 8601 date-time, or YYYY-MM-DD for a full-day event."
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional event description."
+          }
+        },
+        "required": ["account_name", "summary", "start_time", "end_time"]
+      },
+      "requires_confirmation": false,
+      "background": false
+    },
+    {
+      "name": "edit_event",
+      "description": "Updates an existing Google Calendar event by its event ID. Only the provided fields are changed.",
+      "module": ".calendar_tool",
+      "function": "edit_event",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_name": {
+            "type": "string",
+            "enum": { "$config": "accounts" },
+            "description": "Google account to use."
+          },
+          "event_id": {
+            "type": "string",
+            "description": "ID of the event to update, as returned by get_events."
+          },
+          "summary": {
+            "type": "string",
+            "description": "New event title."
+          },
+          "start_time": {
+            "type": "string",
+            "description": "New event start as ISO 8601 date-time."
+          },
+          "end_time": {
+            "type": "string",
+            "description": "New event end as ISO 8601 date-time."
+          },
+          "description": {
+            "type": "string",
+            "description": "New event description."
+          }
+        },
+        "required": ["account_name", "event_id"]
+      },
+      "requires_confirmation": true,
+      "background": false
+    },
+    {
+      "name": "delete_event",
+      "description": "Deletes a Google Calendar event by its event ID. This cannot be undone.",
+      "module": ".calendar_tool",
+      "function": "delete_event",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_name": {
+            "type": "string",
+            "enum": { "$config": "accounts" },
+            "description": "Google account to use."
+          },
+          "event_id": {
+            "type": "string",
+            "description": "ID of the event to delete, as returned by get_events."
+          }
+        },
+        "required": ["account_name", "event_id"]
+      },
+      "requires_confirmation": true,
+      "background": false
+    }
+  ]
+}

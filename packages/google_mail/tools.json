@@ -1,0 +1,58 @@
+{
+  "tools": [
+    {
+      "name": "send_email",
+      "description": "Sends an email from a Google account to a recipient.",
+      "module": ".mail_tool",
+      "function": "send_email",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_name": {
+            "type": "string",
+            "enum": { "$config": "accounts" },
+            "description": "Google account to send from."
+          },
+          "to": {
+            "type": "string",
+            "description": "Recipient email address."
+          },
+          "subject": {
+            "type": "string",
+            "description": "Email subject."
+          },
+          "body": {
+            "type": "string",
+            "description": "Email body text."
+          }
+        },
+        "required": ["account_name", "to", "subject", "body"]
+      },
+      "requires_confirmation": true,
+      "background": false
+    },
+    {
+      "name": "get_recent_emails",
+      "description": "Lists recent emails from the inbox of a Google account, with senders, subjects and snippets.",
+      "module": ".mail_tool",
+      "function": "get_recent_emails",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_name": {
+            "type": "string",
+            "enum": { "$config": "accounts" },
+            "description": "Google account to read from."
+          },
+          "max_results": {
+            "type": "integer",
+            "description": "Number of emails to return. Defaults to 5."
+          }
+        },
+        "required": ["account_name"]
+      },
+      "requires_confirmation": false,
+      "background": true
+    }
+  ]
+}

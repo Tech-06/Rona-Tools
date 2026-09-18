@@ -1,0 +1,26 @@
+{
+  "tools": [
+    {
+      "name": "web_search",
+      "description": "Searches the web for a query and returns matching pages (title, URL, content snippet).",
+      "module": ".web_search",
+      "function": "web_search",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query."
+          },
+          "max_results": {
+            "type": "integer",
+            "description": "Maximum number of results to return. Defaults to 5."
+          }
+        },
+        "required": ["query"]
+      },
+      "requires_confirmation": false,
+      "background": true
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "deepl_translate",
+  "version": "1.0.0",
+  "kind": "tool",
+  "name": "Translate (DeepL)",
+  "description": "Translates text with the DeepL API.",
+  "provides": ["translate_text"],
+  "requires": [],
+  "python_requirements": ["deepl>=1.5"],
+  "config": [
+    {
+      "key": "api_key",
+      "label": "DeepL API Key",
+      "description": "API key from https://www.deepl.com/pro-api",
+      "type": "string",
+      "target": "env",
+      "env_var": "DEEPL_API_KEY",
+      "secret": true,
+      "required": true
+    }
+  ],
+  "health_check": ".health:check"
+}

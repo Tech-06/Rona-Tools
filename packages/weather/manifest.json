@@ -1,0 +1,23 @@
+{
+  "id": "weather",
+  "version": "1.0.0",
+  "kind": "tool",
+  "name": "Weather (OpenWeather)",
+  "description": "Gets current weather conditions for a city via the OpenWeatherMap API.",
+  "provides": ["get_weather"],
+  "requires": [],
+  "python_requirements": ["requests>=2.32"],
+  "config": [
+    {
+      "key": "api_key",
+      "label": "OpenWeatherMap API Key",
+      "description": "API key from https://openweathermap.org/api",
+      "type": "string",
+      "target": "env",
+      "env_var": "OPENWEATHER_API_KEY",
+      "secret": true,
+      "required": true
+    }
+  ],
+  "health_check": ".health:check"
+}

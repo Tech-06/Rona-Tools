@@ -1,0 +1,22 @@
+{
+  "tools": [
+    {
+      "name": "get_weather",
+      "description": "Gets the current weather (description, temperature, humidity) for a city.",
+      "module": ".get_weather",
+      "function": "get_weather",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "description": "City name, e.g. 'Istanbul'."
+          }
+        },
+        "required": ["city"]
+      },
+      "requires_confirmation": false,
+      "background": true
+    }
+  ]
+}

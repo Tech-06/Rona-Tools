@@ -1,0 +1,22 @@
+{
+  "tools": [
+    {
+      "name": "get_time",
+      "description": "Returns the current date and time for a given IANA timezone (e.g. 'Europe/Istanbul', 'UTC').",
+      "module": ".get_time",
+      "function": "get_time",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone name. Defaults to 'UTC'."
+          }
+        },
+        "required": []
+      },
+      "requires_confirmation": false,
+      "background": true
+    }
+  ]
+}

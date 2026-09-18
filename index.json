@@ -1,0 +1,59 @@
+{
+  "catalog_version": 1,
+  "packages": [
+    {
+      "id": "get_time",
+      "version": "1.0.0",
+      "name": "Get Time",
+      "description": "Current date/time in any IANA timezone. No setup needed."
+    },
+    {
+      "id": "web_search",
+      "version": "1.0.0",
+      "name": "Web Search (Tavily)",
+      "description": "Searches the web via the Tavily API."
+    },
+    {
+      "id": "weather",
+      "version": "1.0.0",
+      "name": "Weather (OpenWeather)",
+      "description": "Current weather for a city via OpenWeatherMap."
+    },
+    {
+      "id": "deepl_translate",
+      "version": "1.0.0",
+      "name": "Translate (DeepL)",
+      "description": "Text translation via the DeepL API."
+    },
+    {
+      "id": "notes",
+      "version": "1.0.0",
+      "name": "Notes",
+      "description": "A local notes list stored in Rona's own database."
+    },
+    {
+      "id": "google_auth",
+      "version": "1.0.0",
+      "name": "Google Account Authorization",
+      "description": "Shared Google OAuth plumbing. Installed automatically as a dependency of the Google tools below; provides no tools of its own."
+    },
+    {
+      "id": "google_calendar",
+      "version": "1.0.0",
+      "name": "Google Calendar",
+      "description": "List/add/edit/delete Google Calendar events."
+    },
+    {
+      "id": "google_contacts",
+      "version": "1.0.0",
+      "name": "Google Contacts",
+      "description": "List/add/edit/delete Google Contacts."
+    },
+    {
+      "id": "google_mail",
+      "version": "1.0.0",
+      "name": "Google Mail",
+      "description": "Send email and read the recent Gmail inbox."
+    }
+  ]
+}

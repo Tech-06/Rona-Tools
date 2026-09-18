@@ -1,0 +1,124 @@
+{
+  "tools": [
+    {
+      "name": "get_contacts",
+      "description": "Lists contacts from the Google Contacts of an account, with names, email addresses and phone numbers.",
+      "module": ".contacts_tool",
+      "function": "get_contacts",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_name": {
+            "type": "string",
+            "enum": { "$config": "accounts" },
+            "description": "Google account to use."
+          },
+          "page_size": {
+            "type": "integer",
+            "description": "Number of contacts to return. Defaults to 10."
+          }
+        },
+        "required": ["account_name"]
+      },
+      "requires_confirmation": false,
+      "background": true
+    },
+    {
+      "name": "add_contact",
+      "description": "Adds a new contact to the Google Contacts of an account.",
+      "module": ".contacts_tool",
+      "function": "add_contact",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_name": {
+            "type": "string",
+            "enum": { "$config": "accounts" },
+            "description": "Google account to use."
+          },
+          "first_name": {
+            "type": "string",
+            "description": "Given name of the contact."
+          },
+          "last_name": {
+            "type": "string",
+            "description": "Family name of the contact."
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the contact."
+          },
+          "phone": {
+            "type": "string",
+            "description": "Phone number of the contact."
+          }
+        },
+        "required": ["account_name", "first_name"]
+      },
+      "requires_confirmation": true,
+      "background": false
+    },
+    {
+      "name": "edit_contact",
+      "description": "Updates an existing Google contact by its resource name. Only the provided fields are changed.",
+      "module": ".contacts_tool",
+      "function": "edit_contact",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_name": {
+            "type": "string",
+            "enum": { "$config": "accounts" },
+            "description": "Google account to use."
+          },
+          "resource_name": {
+            "type": "string",
+            "description": "Resource name of the contact, as returned by get_contacts."
+          },
+          "first_name": {
+            "type": "string",
+            "description": "New given name."
+          },
+          "last_name": {
+            "type": "string",
+            "description": "New family name."
+          },
+          "email": {
+            "type": "string",
+            "description": "New email address."
+          },
+          "phone": {
+            "type": "string",
+            "description": "New phone number."
+          }
+        },
+        "required": ["account_name", "resource_name"]
+      },
+      "requires_confirmation": true,
+      "background": false
+    },
+    {
+      "name": "delete_contact",
+      "description": "Deletes a Google contact by its resource name. This cannot be undone.",
+      "module": ".contacts_tool",
+      "function": "delete_contact",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_name": {
+            "type": "string",
+            "enum": { "$config": "accounts" },
+            "description": "Google account to use."
+          },
+          "resource_name": {
+            "type": "string",
+            "description": "Resource name of the contact, as returned by get_contacts."
+          }
+        },
+        "required": ["account_name", "resource_name"]
+      },
+      "requires_confirmation": true,
+      "background": false
+    }
+  ]
+}

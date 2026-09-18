@@ -1,0 +1,26 @@
+{
+  "tools": [
+    {
+      "name": "translate_text",
+      "description": "Translates text with the DeepL API and returns the translation plus the detected source language.",
+      "module": ".deepl_translate",
+      "function": "translate_text",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text to translate."
+          },
+          "target_lang": {
+            "type": "string",
+            "description": "DeepL target language code, e.g. 'EN-US', 'TR', 'DE'."
+          }
+        },
+        "required": ["text", "target_lang"]
+      },
+      "requires_confirmation": false,
+      "background": true
+    }
+  ]
+}

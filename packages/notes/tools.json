@@ -1,0 +1,92 @@
+{
+  "tools": [
+    {
+      "name": "add_note",
+      "description": "Adds a new note to the local notes database.",
+      "module": ".notes_tool",
+      "function": "add_note",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Note title."
+          },
+          "body": {
+            "type": "string",
+            "description": "Note content."
+          }
+        },
+        "required": ["title", "body"]
+      },
+      "requires_confirmation": false,
+      "background": false
+    },
+    {
+      "name": "get_notes",
+      "description": "Lists notes from the local notes database, newest first.",
+      "module": ".notes_tool",
+      "function": "get_notes",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "description": "Maximum number of notes to return. Defaults to 50."
+          },
+          "offset": {
+            "type": "integer",
+            "description": "Number of notes to skip for pagination. Defaults to 0."
+          }
+        },
+        "required": []
+      },
+      "requires_confirmation": false,
+      "background": true
+    },
+    {
+      "name": "edit_note",
+      "description": "Updates an existing note by its ID. Only the provided fields are changed.",
+      "module": ".notes_tool",
+      "function": "edit_note",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "note_id": {
+            "type": "integer",
+            "description": "ID of the note to update, as returned by get_notes."
+          },
+          "title": {
+            "type": "string",
+            "description": "New note title."
+          },
+          "body": {
+            "type": "string",
+            "description": "New note content."
+          }
+        },
+        "required": ["note_id"]
+      },
+      "requires_confirmation": true,
+      "background": false
+    },
+    {
+      "name": "delete_note",
+      "description": "Deletes a note by its ID from the local notes database.",
+      "module": ".notes_tool",
+      "function": "delete_note",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "note_id": {
+            "type": "integer",
+            "description": "ID of the note to delete, as returned by get_notes."
+          }
+        },
+        "required": ["note_id"]
+      },
+      "requires_confirmation": true,
+      "background": false
+    }
+  ]
+}

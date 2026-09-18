@@ -1,0 +1,27 @@
+{
+  "id": "google_auth",
+  "version": "1.0.0",
+  "kind": "library",
+  "name": "Google Account Authorization",
+  "description": "Shared Google OAuth plumbing (credentials + per-account tokens) used by google_calendar, google_contacts and google_mail. Provides no tools by itself -- install it automatically pulls this in as a dependency.",
+  "provides": [],
+  "requires": [],
+  "python_requirements": [
+    "google-api-python-client>=2.130",
+    "google-auth-httplib2>=0.2",
+    "google-auth-oauthlib>=1.2"
+  ],
+  "config": [
+    {
+      "key": "credentials_file",
+      "label": "OAuth client credentials.json",
+      "description": "Path to the OAuth client credentials.json downloaded from Google Cloud Console (APIs & Services > Credentials > OAuth client ID > Desktop app).",
+      "type": "string",
+      "target": "file",
+      "dest_filename": "credentials.json",
+      "secret": true,
+      "required": true
+    }
+  ],
+  "health_check": ".health:check"
+}

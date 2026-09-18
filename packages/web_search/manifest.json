@@ -1,0 +1,23 @@
+{
+  "id": "web_search",
+  "version": "1.0.0",
+  "kind": "tool",
+  "name": "Web Search (Tavily)",
+  "description": "Searches the web via the Tavily API and returns titles, URLs and content snippets.",
+  "provides": ["web_search"],
+  "requires": [],
+  "python_requirements": ["tavily-python>=0.5"],
+  "config": [
+    {
+      "key": "api_key",
+      "label": "Tavily API Key",
+      "description": "API key from https://tavily.com",
+      "type": "string",
+      "target": "env",
+      "env_var": "TAVILY_API_KEY",
+      "secret": true,
+      "required": true
+    }
+  ],
+  "health_check": ".health:check"
+}

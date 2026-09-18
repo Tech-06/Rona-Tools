@@ -1,0 +1,13 @@
+{
+  "id": "notes",
+  "version": "1.0.0",
+  "kind": "tool",
+  "name": "Notes",
+  "description": "A local notes list (add/list/edit/delete) stored in Rona's own database.",
+  "provides": ["add_note", "get_notes", "edit_note", "delete_note"],
+  "requires": [],
+  "python_requirements": [],
+  "schema_sql": "schema.sql",
+  "config": [],
+  "health_check": ".health:check"
+}

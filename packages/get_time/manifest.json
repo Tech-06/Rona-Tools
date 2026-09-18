@@ -1,0 +1,12 @@
+{
+  "id": "get_time",
+  "version": "1.0.0",
+  "kind": "tool",
+  "name": "Get Time",
+  "description": "Returns the current time in a given IANA timezone. No API key or setup needed.",
+  "provides": ["get_time"],
+  "requires": [],
+  "python_requirements": [],
+  "config": [],
+  "health_check": ".health:check"
+}
