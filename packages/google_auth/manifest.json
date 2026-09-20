@@ -1,9 +1,9 @@
 {
   "id": "google_auth",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "kind": "library",
   "name": "Google Account Authorization",
-  "description": "Shared Google OAuth plumbing (credentials + per-account tokens) used by google_calendar, google_contacts and google_mail. Provides no tools by itself -- install it automatically pulls this in as a dependency.",
+  "description": "Shared Google OAuth plumbing (one OAuth client, any number of accounts) used by google_calendar, google_contacts and google_mail. Provides no tools of its own -- installing any of those pulls this in as a dependency.",
   "provides": [],
   "requires": [],
   "python_requirements": [
@@ -15,13 +15,76 @@
     {
       "key": "credentials_file",
       "label": "OAuth client credentials.json",
-      "description": "Path to the OAuth client credentials.json downloaded from Google Cloud Console (APIs & Services > Credentials > OAuth client ID > Desktop app).",
+      "description": "Path to the OAuth client credentials.json downloaded from Google Cloud Console (APIs & Services > Credentials > OAuth client ID > Desktop app). One client authorizes every account.",
       "type": "string",
       "target": "file",
       "dest_filename": "credentials.json",
       "secret": true,
       "required": true
+    },
+    {
+      "key": "scopes",
+      "label": "Requested scopes",
+      "description": "Google API scopes to ask for, comma-separated. Leave empty for the default set (Calendar, Contacts and Mail), which is what the three Google tool packages collectively need. Narrowing this invalidates tokens you already have.",
+      "type": "list",
+      "target": "config",
+      "required": false
     }
   ],
+  "actions": [
+    {
+      "id": "add_account",
+      "label": "Add a Google account",
+      "description": "Authorize an account. Gives you a link to open on any device and takes back the address it redirects to, so this works on a server you only reach over SSH.",
+      "handler": ".actions:add_account",
+      "params": [
+        {
+          "key": "account_name",
+          "label": "Account name",
+          "description": "A short name you will refer to this account by, e.g. personal or work. Letters, digits, dots, dashes and underscores.",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "list_accounts",
+      "label": "Authorized accounts",
+      "description": "List every authorized account and whether its token still works.",
+      "handler": ".actions:list_accounts",
+      "params": []
+    },
+    {
+      "id": "remove_account",
+      "label": "Remove an account",
+      "description": "Delete one account's stored authorization. It can be added again at any time.",
+      "handler": ".actions:remove_account",
+      "destructive": true,
+      "params": [
+        {
+          "key": "account_name",
+          "label": "Account name",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "add_account_here",
+      "label": "Add an account using this machine's browser",
+      "description": "Opens a consent page on the machine the backend runs on. Only useful when that is your own computer -- on a server, use 'Add a Google account' instead.",
+      "handler": ".actions:add_account_here",
+      "cli_only": true,
+      "params": [
+        {
+          "key": "account_name",
+          "label": "Account name",
+          "type": "string",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "user_data_globs": ["token_*.json"],
   "health_check": ".health:check"
 }

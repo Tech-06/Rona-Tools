@@ -1,20 +1,29 @@
 {
   "id": "google_calendar",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "tool",
   "name": "Google Calendar",
   "description": "List, add, edit and delete events on a Google account's primary calendar.",
-  "provides": ["get_events", "add_event", "edit_event", "delete_event"],
-  "requires": ["google_auth"],
-  "python_requirements": ["google-api-python-client>=2.130"],
+  "provides": [
+    "get_events",
+    "add_event",
+    "edit_event",
+    "delete_event"
+  ],
+  "requires": [
+    "google_auth"
+  ],
+  "python_requirements": [
+    "google-api-python-client>=2.130"
+  ],
   "config": [
     {
       "key": "accounts",
       "label": "Allowed accounts",
-      "description": "Google account names this tool may use, comma-separated. Each one needs its own token: run 'python -m toolbox.custom.google_auth.add_account <name>' once per account (opens a browser to authorize).",
+      "description": "Google account names this tool may use, comma-separated. Leave empty for now and fill it in once you have authorized an account: add accounts with `rona tools run google_auth add_account` or from the dashboard's Settings > Connections > Tool Packages panel, then set this list there too.",
       "type": "list",
       "target": "config",
-      "required": true
+      "required": false
     }
   ],
   "health_check": ".health:check"

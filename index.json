@@ -1,59 +1,83 @@
 {
-  "catalog_version": 1,
+  "catalog_version": 2,
   "packages": [
     {
       "id": "get_time",
       "version": "1.0.0",
       "name": "Get Time",
-      "description": "Current date/time in any IANA timezone. No setup needed."
+      "description": "Current date/time in any IANA timezone. No setup needed.",
+      "kind": "tool",
+      "requires": []
     },
     {
       "id": "web_search",
       "version": "1.0.0",
       "name": "Web Search (Tavily)",
-      "description": "Searches the web via the Tavily API."
+      "description": "Searches the web via the Tavily API.",
+      "kind": "tool",
+      "requires": []
     },
     {
       "id": "weather",
       "version": "1.0.0",
       "name": "Weather (OpenWeather)",
-      "description": "Current weather for a city via OpenWeatherMap."
+      "description": "Current weather for a city via OpenWeatherMap.",
+      "kind": "tool",
+      "requires": []
     },
     {
       "id": "deepl_translate",
       "version": "1.0.0",
       "name": "Translate (DeepL)",
-      "description": "Text translation via the DeepL API."
+      "description": "Text translation via the DeepL API.",
+      "kind": "tool",
+      "requires": []
     },
     {
       "id": "notes",
       "version": "1.0.0",
       "name": "Notes",
-      "description": "A local notes list stored in Rona's own database."
+      "description": "A local notes list stored in Rona's own database.",
+      "kind": "tool",
+      "requires": []
     },
     {
       "id": "google_auth",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "name": "Google Account Authorization",
-      "description": "Shared Google OAuth plumbing. Installed automatically as a dependency of the Google tools below; provides no tools of its own."
+      "description": "Shared Google OAuth plumbing. Installed automatically as a dependency of the Google tools below; provides no tools of its own.",
+      "kind": "library",
+      "requires": []
     },
     {
       "id": "google_calendar",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "name": "Google Calendar",
-      "description": "List/add/edit/delete Google Calendar events."
+      "description": "List/add/edit/delete Google Calendar events.",
+      "kind": "tool",
+      "requires": [
+        "google_auth"
+      ]
     },
     {
       "id": "google_contacts",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "name": "Google Contacts",
-      "description": "List/add/edit/delete Google Contacts."
+      "description": "List/add/edit/delete Google Contacts.",
+      "kind": "tool",
+      "requires": [
+        "google_auth"
+      ]
     },
     {
       "id": "google_mail",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "name": "Google Mail",
-      "description": "Send email and read the recent Gmail inbox."
+      "description": "Send email and read the recent Gmail inbox.",
+      "kind": "tool",
+      "requires": [
+        "google_auth"
+      ]
     }
   ]
 }
