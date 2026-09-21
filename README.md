@@ -39,6 +39,7 @@ rona tools uninstall <id>
 | [`google_calendar`](packages/google_calendar) | list/add/edit/delete Calendar events | `google_auth` + at least one authorized account |
 | [`google_contacts`](packages/google_contacts) | list/add/edit/delete Contacts | `google_auth` + at least one authorized account |
 | [`google_mail`](packages/google_mail) | send mail / read the recent inbox | `google_auth` + at least one authorized account |
+| [`blackboard`](packages/blackboard) | courses, announcements, calendar, assignments, grades and course content from Blackboard Learn | a Blackboard Learn account at any institution -- see [Blackboard account](#blackboard-account) below |
 
 ### Dependencies
 
@@ -67,6 +68,18 @@ rona tools config google_calendar --set accounts=personal,work
 ```
 
 `rona tools run google_auth list_accounts` shows what is authorized and whether each token still works; `remove_account` revokes one.
+
+## Blackboard account
+
+`blackboard` talks to your institution's own Blackboard Learn site (`base_url` in its config -- there's no shared "Blackboard cloud" to point at, every school runs its own). It has to be logged in separately from Rona itself, and there are three ways to do that depending on what your institution's Blackboard requires:
+
+- **`rona tools run blackboard login`** -- signs in directly over HTTP, no browser at all, typically a couple of seconds. This is the right choice on a server. Only works if your institution's Blackboard has a direct login form (no single sign-on in front of it); it falls back to a headless browser automatically for the rare institution whose login page needs one.
+- **`rona tools run blackboard login_sso`** -- opens a real, visible browser window on the machine the backend runs on, and waits for you to finish signing in yourself (SSO, MFA, whatever your institution asks for) before saving the session. Only useful on your own machine, not over SSH -- it's `cli_only` for exactly that reason.
+- **`rona tools run blackboard import_session`** -- paste in the cookies from a browser where you're already logged in (DevTools -> Network -> any request -> the `Cookie` header). Works anywhere, including over SSH, and needs no browser automation at all.
+
+`rona tools run blackboard session_status` shows whether a session is stored and still valid; `logout` deletes it.
+
+The session is just cookies, the same way any browser session is -- there's no long-lived refresh token like the Google packages get from OAuth. But once a username and password are configured, the package takes care of that itself: it renews the session before it expires and logs back in from scratch if there's no session at all, so a server install keeps working without anyone re-running `login` by hand. Without a username/password on file (an SSO-only account using `import_session`), a fresh login is still on you once the session Blackboard gave you expires.
 
 ## Package format
 

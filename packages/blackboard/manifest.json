@@ -1,0 +1,150 @@
+{
+  "id": "blackboard",
+  "version": "2.0.0",
+  "kind": "tool",
+  "name": "Blackboard Learn",
+  "description": "Read-only access to a Blackboard Learn (Ultra) account: courses, announcements, calendar, assignments, grades and course content. Works with any institution's Blackboard, not just one specific school.",
+  "provides": [
+    "bb_get_courses",
+    "bb_get_announcements",
+    "bb_get_calendar",
+    "bb_get_assignments",
+    "bb_get_course_content",
+    "bb_get_item",
+    "bb_get_assignment_detail",
+    "bb_get_grades"
+  ],
+  "requires": [],
+  "python_requirements": [
+    "playwright>=1.40"
+  ],
+  "config": [
+    {
+      "key": "base_url",
+      "label": "Blackboard URL",
+      "description": "Your institution's Blackboard Learn base URL, e.g. https://your-school.blackboard.com (no trailing slash, no path after the domain).",
+      "type": "string",
+      "target": "config",
+      "required": true
+    },
+    {
+      "key": "auth_mode",
+      "label": "Login method",
+      "description": "How the 'login' action signs in: 'direct' fills the username/password form itself and can run headless on a server. 'sso' and 'manual' logins are always available as the 'login_sso' and 'import_session' actions regardless of this setting -- use those instead if your institution doesn't use a direct username/password form (Microsoft Entra, Shibboleth, CAS, and anything with MFA all need one of those two). Defaults to 'direct'.",
+      "type": "string",
+      "target": "config",
+      "required": false,
+      "default": "direct"
+    },
+    {
+      "key": "username",
+      "label": "Username",
+      "description": "Blackboard username. Used by the 'login' action in 'direct' mode, and also lets the package renew its own session and log itself back in automatically as it nears expiry.",
+      "type": "string",
+      "target": "config",
+      "required": false
+    },
+    {
+      "key": "password",
+      "label": "Password",
+      "description": "Blackboard password. Used by the 'login' action in 'direct' mode, and also lets the package renew its own session and log itself back in automatically as it nears expiry. Stored in Rona's .env, never in this package's own config.json.",
+      "type": "string",
+      "target": "env",
+      "env_var": "BB_PASSWORD",
+      "secret": true,
+      "required": false
+    },
+    {
+      "key": "timezone",
+      "label": "Timezone",
+      "description": "IANA timezone to render dates in, e.g. Europe/Istanbul. Leave empty to use Rona's own configured timezone.",
+      "type": "string",
+      "target": "config",
+      "required": false
+    },
+    {
+      "key": "cache_ttl",
+      "label": "Cache TTL (seconds)",
+      "description": "How long a Blackboard API response is reused before being re-fetched. Defaults to 300.",
+      "type": "integer",
+      "target": "config",
+      "required": false,
+      "default": 300
+    },
+    {
+      "key": "login_username_selector",
+      "label": "Login form: username field selector (advanced)",
+      "description": "CSS selector for the username input on your institution's direct login page. Leave empty to try a list of common Blackboard defaults automatically.",
+      "type": "string",
+      "target": "config",
+      "required": false
+    },
+    {
+      "key": "login_password_selector",
+      "label": "Login form: password field selector (advanced)",
+      "description": "CSS selector for the password input. Leave empty to try common defaults automatically.",
+      "type": "string",
+      "target": "config",
+      "required": false
+    },
+    {
+      "key": "login_submit_selector",
+      "label": "Login form: submit button selector (advanced)",
+      "description": "CSS selector for the login submit button. Leave empty to try common defaults automatically.",
+      "type": "string",
+      "target": "config",
+      "required": false
+    }
+  ],
+  "actions": [
+    {
+      "id": "login",
+      "label": "Log in (direct)",
+      "description": "Signs in with the configured username/password by posting straight to Blackboard's own login form -- no browser at all, typically a couple of seconds, and safe to run on a server. Falls back automatically to a headless browser only if that institution's login page is too customised for the direct HTTP path to handle. Only works when your institution has a direct Blackboard login form -- if it redirects to a Microsoft/Google/Shibboleth sign-in page instead, use 'Log in (SSO)' or 'Import a session' below.",
+      "handler": ".actions:login",
+      "params": []
+    },
+    {
+      "id": "login_sso",
+      "label": "Log in (SSO, opens a browser)",
+      "description": "Opens a visible browser window on this machine so you can complete your institution's single sign-on and MFA yourself. Once it detects you're signed in, it saves the session and closes the window. Only useful on the machine the backend itself runs on -- on a headless server, use 'Import a session' instead.",
+      "handler": ".actions:login_sso",
+      "cli_only": true,
+      "params": []
+    },
+    {
+      "id": "import_session",
+      "label": "Import a session",
+      "description": "Paste in the Blackboard cookies from a browser where you're already logged in. Works everywhere, including over SSH -- this is the one to use if 'Log in (SSO)' isn't an option and your institution doesn't use a direct login form.",
+      "handler": ".actions:import_session",
+      "params": []
+    },
+    {
+      "id": "session_status",
+      "label": "Session status",
+      "description": "Shows whether a Blackboard session is stored and whether it's still valid.",
+      "handler": ".actions:session_status",
+      "params": []
+    },
+    {
+      "id": "logout",
+      "label": "Forget session",
+      "description": "Deletes the stored session. You'll need to log in again before any Blackboard tool works.",
+      "handler": ".actions:logout",
+      "destructive": true,
+      "params": []
+    },
+    {
+      "id": "install_browser",
+      "label": "Install browser for login",
+      "description": "Downloads the Chromium browser Playwright needs (~150 MB). Required for 'login_sso', and for the rare institution where 'login' can't sign in over plain HTTP and has to fall back to a browser. Not needed for a normal direct-login setup or for 'Import a session'.",
+      "handler": ".actions:install_browser",
+      "cli_only": true,
+      "params": []
+    }
+  ],
+  "user_data_globs": [
+    "session.json"
+  ],
+  "health_check": ".health:check"
+}

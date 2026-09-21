@@ -78,6 +78,14 @@
       "requires": [
         "google_auth"
       ]
+    },
+    {
+      "id": "blackboard",
+      "version": "2.0.0",
+      "name": "Blackboard Learn",
+      "description": "Read-only access to a Blackboard Learn (Ultra) account: courses, announcements, calendar, assignments, grades and course content. Works with any institution's Blackboard.",
+      "kind": "tool",
+      "requires": []
     }
   ]
 }

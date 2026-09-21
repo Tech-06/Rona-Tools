@@ -1,0 +1,199 @@
+{
+  "tools": [
+    {
+      "name": "bb_get_courses",
+      "description": "Lists the student's Blackboard courses: course ID, course code, name, term, role and whether it's marked as a favorite.",
+      "module": ".blackboard_tool",
+      "function": "bb_get_courses",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "include_inactive": {
+            "type": "boolean",
+            "description": "Include courses that are no longer available/active. Defaults to false (only active courses)."
+          }
+        },
+        "required": []
+      },
+      "requires_confirmation": false,
+      "background": true
+    },
+    {
+      "name": "bb_get_announcements",
+      "description": "Fetches announcements from Blackboard courses. If course_id is omitted, returns the most recent announcements across every course.",
+      "module": ".blackboard_tool",
+      "function": "bb_get_announcements",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "course_id": {
+            "type": "string",
+            "description": "Blackboard course ID (as returned by bb_get_courses). Omit for all courses."
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Maximum number of announcements to return. Defaults to 20."
+          }
+        },
+        "required": []
+      },
+      "requires_confirmation": false,
+      "background": true
+    },
+    {
+      "name": "bb_get_calendar",
+      "description": "Returns calendar events (classes, due dates, exams) across every Blackboard course, in the configured timezone.",
+      "module": ".blackboard_tool",
+      "function": "bb_get_calendar",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "days_ahead": {
+            "type": "integer",
+            "description": "How many days into the future to include. Defaults to 30."
+          },
+          "days_back": {
+            "type": "integer",
+            "description": "How many days into the past to include. Defaults to 0."
+          }
+        },
+        "required": []
+      },
+      "requires_confirmation": false,
+      "background": true
+    },
+    {
+      "name": "bb_get_assignments",
+      "description": "Lists gradable items (assignments, tests and similar) with due dates, derived from the Blackboard calendar. Each item's 'id' is its gradebook column id -- pass it to bb_get_assignment_detail to get the submission status and score. Status here is 'pending' or 'overdue' only; it reflects the due date, not whether anything was actually submitted.",
+      "module": ".blackboard_tool",
+      "function": "bb_get_assignments",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "course_id": {
+            "type": "string",
+            "description": "Blackboard course ID. Omit for all courses."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "all",
+              "pending",
+              "overdue"
+            ],
+            "description": "Filter by due-date status. Defaults to 'all'."
+          },
+          "days_back": {
+            "type": "integer",
+            "description": "How many days into the past to look. Defaults to 30."
+          },
+          "days_ahead": {
+            "type": "integer",
+            "description": "How many days into the future to look. Defaults to 60."
+          }
+        },
+        "required": []
+      },
+      "requires_confirmation": false,
+      "background": true
+    },
+    {
+      "name": "bb_get_course_content",
+      "description": "Lists course materials (folders, files, assignments, tests, links) under one content node of a Blackboard course. Files include a direct download URL.",
+      "module": ".blackboard_tool",
+      "function": "bb_get_course_content",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "course_id": {
+            "type": "string",
+            "description": "Blackboard course ID."
+          },
+          "content_id": {
+            "type": "string",
+            "description": "Parent content node ID. Defaults to ROOT, the top level of the course."
+          }
+        },
+        "required": [
+          "course_id"
+        ]
+      },
+      "requires_confirmation": false,
+      "background": true
+    },
+    {
+      "name": "bb_get_item",
+      "description": "Fetches the full detail of one Blackboard content item: its text, file/download info if it has one, and due date/points if it's a gradable item. For a container -- a folder or an Ultra lesson, which have no text of their own -- it returns the list of items inside instead.",
+      "module": ".blackboard_tool",
+      "function": "bb_get_item",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "course_id": {
+            "type": "string",
+            "description": "Blackboard course ID."
+          },
+          "content_id": {
+            "type": "string",
+            "description": "Content item ID, as returned by bb_get_course_content."
+          }
+        },
+        "required": [
+          "course_id",
+          "content_id"
+        ]
+      },
+      "requires_confirmation": false,
+      "background": true
+    },
+    {
+      "name": "bb_get_assignment_detail",
+      "description": "Fetches one assignment/gradable item's full detail plus this student's own submission status, attempt date and score. Accepts either the content id from bb_get_course_content or the gradebook column id from bb_get_assignments. Does not include instructor feedback text -- Blackboard's API has no field for it.",
+      "module": ".blackboard_tool",
+      "function": "bb_get_assignment_detail",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "course_id": {
+            "type": "string",
+            "description": "Blackboard course ID."
+          },
+          "item_id": {
+            "type": "string",
+            "description": "The item to look up: either a content id (from bb_get_course_content) or a gradebook column id (the 'id' from bb_get_assignments). Both work."
+          }
+        },
+        "required": [
+          "course_id",
+          "item_id"
+        ]
+      },
+      "requires_confirmation": false,
+      "background": true
+    },
+    {
+      "name": "bb_get_grades",
+      "description": "This student's grades for one Blackboard course: every gradebook column with its score, points possible, and whether it's been released. A course whose gradebook the API refuses to show comes back as a clear error rather than a crash.",
+      "module": ".blackboard_tool",
+      "function": "bb_get_grades",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "course_id": {
+            "type": "string",
+            "description": "Blackboard course ID."
+          },
+          "include_ungraded": {
+            "type": "boolean",
+            "description": "Include gradebook columns with no score yet. Defaults to false (only graded columns)."
+          }
+        },
+        "required": [
+          "course_id"
+        ]
+      },
+      "requires_confirmation": false,
+      "background": true
+    }
+  ]
+}
