@@ -19,6 +19,7 @@ rona tools config <id>          # show or change a package's configuration
 rona tools actions <id>         # operations a package exposes
 rona tools run <id> <action>    # run one of them
 rona tools verify <id>          # re-run a package's health check
+rona tools update <id>          # pull in a newer catalog version
 rona tools uninstall <id>
 ```
 
@@ -44,6 +45,10 @@ rona tools uninstall <id>
 ### Dependencies
 
 A package declares what it needs in its manifest's `requires`, and `index.json` mirrors that so Rona can tell you what an install involves *before* downloading anything. Installing `google_calendar` therefore warns you that `google_auth` comes with it and asks first; if you agree, `google_auth` is installed and configured to completion before the calendar package is touched. Uninstalling something another package still requires is refused unless you pass `--force`.
+
+A `requires` entry can be a bare package id (`"google_auth"`) or carry an optional pip-like version constraint: `"google_auth>=2.0"`, `"google_auth>=2.0,<3"`, `"x~=2.1"`. Supported operators are `== != >= <= > < ~=`; a comma between specifiers is AND, so `>=2.0,<3` means "2.x, at least 2.0". Versions are plain dotted integers (`2`, `2.0`, `2.1.3`) -- no pre-releases, no wildcards. Both a package's own `manifest.json` and its mirror entry in `index.json` use this same syntax. If an installed dependency stops satisfying a constraint (a dependent package tightened it in a newer version), Rona's registry logs a warning and surfaces it in the dashboard rather than refusing to load anything; running `rona tools update` on the outdated dependency (or letting the dependent's own update pull it in automatically) is what clears it.
+
+> **Compatibility note:** an older Rona install parses a bare `requires` entry as nothing but a package id -- an entry like `"x>=1"` reads as a package literally named `x>=1`, which it then can't find. Don't publish a version constraint for a dependency in `index.json` until installs have had a real chance to update past the version that added constraint support.
 
 ## Google accounts
 
@@ -143,6 +148,10 @@ A handler is called as `handler(config, params, state)` and returns one of:
 ### User data
 
 `user_data_globs` lists patterns matching files the *user* produced rather than files the package shipped — `google_auth`'s `token_*.json`. Uninstall keeps those by default (parking them aside and restoring them if the package is reinstalled) instead of deleting them, because re-doing that work may not even be possible from the machine at hand. `rona tools uninstall <id> --purge` deletes them.
+
+### Updating a package
+
+`rona tools update <id>` (or the dashboard's Catalog tab) swaps a package's installed folder for a freshly-fetched one at a newer catalog version, then re-runs its `schema_sql` and health check. Preserved automatically, without needing anything in `user_data_globs`: `config.json`, any `.env` entries, and any file placed through a `file`-typed config field (matched by target filename, old and new manifest combined). `user_data_globs` still matters for update, not just uninstall -- add to it any file your *code* writes at runtime that isn't one of those (a cache, a session file, anything not covered by a `config`/`file` field), or an update will silently leave it behind in the old folder instead of carrying it into the new one. `schema_sql` runs again on every update against the same database, so it has to be safe to re-run (`CREATE TABLE IF NOT EXISTS`, not a bare `CREATE TABLE`) -- treat it the same as a migration you might run twice. If anything about the update fails -- pip, the schema, a failed health check without `--keep-on-health-failure`, or the new version simply failing to load -- Rona restores the previous version automatically; nothing is left half-upgraded.
 
 ## Adding a new package
 
